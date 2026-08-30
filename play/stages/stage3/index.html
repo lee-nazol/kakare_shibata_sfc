@@ -79,7 +79,11 @@
       <h2>賤ヶ岳の戦い</h2>
       <p>戦線は崩れ、敵勢は刻一刻と増していく。ここに突破条件はない。</p>
       <p class="tip"><b>生き残るほど敵が増える。</b> 序盤は少数だが、時間経過で同時に迫る敵兵がじわじわ増加する。討死するまで一人でも多く討ち取れ。</p>
-      <button id="startBtn" class="main-btn" type="button">最終戦 開始</button>
+      <div class="start-record"><span>現在の最高記録</span><strong id="startBestRecord">記録なし</strong></div>
+      <div class="modal-actions start-actions">
+        <button id="startBtn" class="main-btn" type="button">最終戦 開始</button>
+        <button id="openRecordsBtn" class="sub-btn" type="button">レコードを見る</button>
+      </div>
     </div>
   </div>
 
@@ -93,17 +97,32 @@
         <div><span>最高討取</span><strong id="resultBest">0</strong></div>
         <div><span>生存時間</span><strong id="resultTime">00:00</strong></div>
         <div><span>かかれ柴田</span><strong id="resultSpecials">0回</strong></div>
+        <div><span>今回の順位</span><strong id="resultRank">—</strong></div>
       </div>
       <p>これが今回の「鬼柴田」の記録。再び賤ヶ岳へ挑み、最高討取数を更新せよ。</p>
       <div class="modal-actions">
         <button id="retryBtn" class="main-btn" type="button">もう一度戦う</button>
+        <button id="resultRecordsBtn" class="sub-btn" type="button">レコードを見る</button>
         <button id="titleBtn" class="sub-btn" type="button">タイトル画面に戻る</button>
       </div>
     </div>
   </div>
 
-  <script src="../../shared/nav.js"></script>
-  <script src="../../shared/game-config.js"></script>
+
+  <div id="recordsOverlay" class="modal-overlay records-overlay">
+    <div class="modal-card records-card">
+      <div class="modal-kicker">賤ヶ岳 戦績帳</div>
+      <h2>レコード</h2>
+      <p class="records-note">討取数の多い順。同数なら生存時間の長い記録を上位に表示します。</p>
+      <div class="record-head"><span>順位</span><span>討取</span><span>生存</span><span>かかれ</span><span>日時</span></div>
+      <div id="recordList" class="record-list"></div>
+      <p class="storage-note">※記録はこのブラウザ内に保存されます。</p>
+      <button id="closeRecordsBtn" class="main-btn" type="button">閉じる</button>
+    </div>
+  </div>
+
+  <script src="shared/nav.js"></script>
+  <script src="shared/game-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

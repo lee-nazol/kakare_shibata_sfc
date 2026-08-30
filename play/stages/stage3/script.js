@@ -48,6 +48,8 @@
   }
 
   const BEST_KEY = 'kakare_shibata_stage3_best_kills_v1';
+  const RECORDS_KEY = 'kakare_shibata_stage3_records_v1';
+  const MAX_RECORDS = 10;
   function loadBest(){
     try { return Math.max(0, Number(localStorage.getItem(BEST_KEY) || 0) || 0); }
     catch(e){ return 0; }
@@ -55,6 +57,56 @@
   function saveBest(v){
     try { localStorage.setItem(BEST_KEY, String(v)); }
     catch(e){}
+  }
+  function loadRecords(){
+    try {
+      const raw = JSON.parse(localStorage.getItem(RECORDS_KEY) || '[]');
+      if(!Array.isArray(raw)) return [];
+      return raw.filter(r => r && Number.isFinite(Number(r.kills))).map(r => ({
+        kills: Math.max(0, Number(r.kills) || 0),
+        time: Math.max(0, Number(r.time) || 0),
+        specials: Math.max(0, Number(r.specials) || 0),
+        playedAt: String(r.playedAt || '')
+      }));
+    } catch(e){ return []; }
+  }
+  function saveRecords(records){
+    try { localStorage.setItem(RECORDS_KEY, JSON.stringify(records.slice(0,MAX_RECORDS))); }
+    catch(e){}
+  }
+  function rankRecords(records){
+    return [...records].sort((a,b) => (b.kills-a.kills) || (b.time-a.time) || (b.specials-a.specials));
+  }
+  function addRecord(record){
+    const records = loadRecords();
+    records.push(record);
+    const ranked = rankRecords(records).slice(0,MAX_RECORDS);
+    saveRecords(ranked);
+    return ranked;
+  }
+  function formatPlayedAt(value){
+    if(!value) return '—';
+    const d = new Date(value);
+    if(Number.isNaN(d.getTime())) return '—';
+    return new Intl.DateTimeFormat('ja-JP',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(d);
+  }
+  function renderRecords(records = loadRecords()){
+    const ranked = rankRecords(records).slice(0,MAX_RECORDS);
+    const body = $('#recordList');
+    if(body){
+      body.innerHTML = ranked.length ? ranked.map((r,i) => `
+        <div class="record-row${i===0?' top':''}">
+          <b class="rank">${i+1}</b>
+          <strong>${r.kills}<small>斬</small></strong>
+          <span>${formatTime(r.time)}</span>
+          <span>${r.specials}回</span>
+          <time>${formatPlayedAt(r.playedAt)}</time>
+        </div>`).join('') : '<p class="empty-record">まだ記録はありません。</p>';
+    }
+    const best = ranked[0];
+    const startBest = $('#startBestRecord');
+    if(startBest) startBest.textContent = best ? `${best.kills}斬 / ${formatTime(best.time)}` : '記録なし';
+    return ranked;
   }
 
   const game = {
@@ -313,11 +365,15 @@
     const newBest=Math.max(oldBest,game.kills);
     if(newBest>game.best){ game.best=newBest; saveBest(newBest); }
     else if(game.kills>oldBest){ game.best=game.kills; saveBest(game.kills); }
+    const ranked = addRecord({kills:game.kills,time:game.elapsed,specials:game.specials,playedAt:new Date().toISOString()});
+    const rank = ranked.findIndex(r => r.kills===game.kills && Math.abs(r.time-game.elapsed)<0.001 && r.specials===game.specials);
     $('#resultKills').textContent=game.kills;
     $('#resultBest').textContent=Math.max(oldBest,game.kills);
     $('#resultTime').textContent=formatTime(game.elapsed);
     $('#resultSpecials').textContent=`${game.specials}回`;
+    $('#resultRank').textContent = rank>=0 ? `${rank+1}位` : '圏外';
     $('#recordBadge').classList.toggle('active',game.kills>oldBest);
+    renderRecords(ranked);
     updateHudDom();
     $('#gameOverOverlay').classList.add('active');
   }
@@ -425,7 +481,9 @@
 
   $('#startBtn').onclick=()=>{initAudio();if(game.audio?.state==='suspended')game.audio.resume();startBattle();};
   $('#retryBtn').onclick=startBattle;
-  $('#titleBtn').onclick=()=>KAKARE_NAV.go('title','../../title/index.html');
+  $('#titleBtn').onclick=()=>location.href='index.html';
+  $$('#openRecordsBtn, #resultRecordsBtn').forEach(btn=>btn.onclick=()=>{renderRecords();$('#recordsOverlay').classList.add('active');});
+  $('#closeRecordsBtn').onclick=()=>$('#recordsOverlay').classList.remove('active');
   $('#pauseBtn').onclick=()=>{if(!game.started)return;game.paused=!game.paused;$('#pauseText').classList.toggle('active',game.paused);};
   $('#soundBtn').onclick=()=>{initAudio();game.sound=!game.sound;$('#soundBtn').textContent=game.sound?'♪ ON':'♪ OFF';};
   $('#attackBtn').onpointerdown=e=>{e.preventDefault();attack();};
@@ -442,5 +500,5 @@
     btn.addEventListener('pointerdown',on);btn.addEventListener('pointerup',off);btn.addEventListener('pointercancel',off);btn.addEventListener('pointerleave',off);
   });
 
-  loadAll().then(()=>{resetBattle();drawWorld();}).catch(err=>console.error(err));
+  loadAll().then(()=>{resetBattle();renderRecords();drawWorld();}).catch(err=>console.error(err));
 })();
