@@ -1,11 +1,109 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>第三陣　賤ヶ岳の戦い</title>
-<style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#36150c,#0b0604 65%);color:#f3ddb0;font-family:"Yu Mincho","Hiragino Mincho ProN",serif}body{display:grid;place-items:center;padding:18px}.card{width:min(720px,95vw);text-align:center;padding:42px 28px;border:3px solid #b98c47;background:linear-gradient(#35231c,#160e0b);box-shadow:0 20px 60px #000c}.k{color:#d5ad5b;letter-spacing:.18em;font:900 13px ui-monospace,monospace}h1{font-size:clamp(34px,7vw,62px);margin:10px 0;color:#f5dfaa;text-shadow:4px 4px #6e2018}p{font-family:"Yu Gothic",sans-serif;line-height:1.7;color:#d7c4a5}.buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}button{padding:12px 22px;border:2px solid #1d110d;background:#5d473a;color:#f5e4c0;font-weight:900;cursor:pointer}.primary{background:linear-gradient(#c94d37,#9d2c22)}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#100806">
+  <title>かかれ柴田！ 第三陣 賤ヶ岳の戦い</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body><main class="card"><div class="k">DEVELOPMENT SLOT</div><h1>第三陣　賤ヶ岳の戦い</h1><p>このフォルダは次の陣を独立して開発・確認するためのスロットです。<br>完成したらこの index.html をそのまま差し替えれば、プレイ入口から連続して進められます。</p><div class="buttons"><button id="titleBtn">タイトルへ</button><button id="stage1Btn" class="primary">第一陣を確認</button></div></main><script src="../../shared/nav.js"></script><script>document.getElementById('titleBtn').onclick=()=>KAKARE_NAV.go('title','../../title/index.html');document.getElementById('stage1Btn').onclick=()=>KAKARE_NAV.go('stage1','../stage1/index.html');</script></body>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">ORIGINAL 16BIT SAMURAI ACTION / FINAL STAGE</div>
+        <h1>かかれ柴田！</h1>
+      </div>
+      <div class="top-actions">
+        <button id="soundBtn" class="small-btn" type="button">♪ ON</button>
+        <button id="pauseBtn" class="small-btn" type="button">PAUSE</button>
+      </div>
+    </header>
+
+    <section id="gameWrap" class="game-wrap">
+      <canvas id="game" width="640" height="448" aria-label="第三陣 賤ヶ岳の戦い"></canvas>
+
+      <div class="hud-layer" aria-hidden="true">
+        <section class="hud-player">
+          <img src="images/portrait.png" alt="" class="hud-portrait">
+          <div class="hud-stats">
+            <div class="hud-row"><span>体力</span><div class="bar"><i id="hpBar" class="hp"></i></div><b id="hpValue">100</b></div>
+            <div class="hud-row"><span>士気</span><div class="bar"><i id="moraleBar" class="morale"></i></div><b id="moraleValue">0</b></div>
+            <div class="hud-killline">討取 <strong id="hudKills">0</strong></div>
+          </div>
+        </section>
+
+        <section class="hud-stage">
+          <strong>第三陣　賤ヶ岳の戦い</strong>
+          <span>討死するまで戦い抜け</span>
+        </section>
+
+        <section class="battle-info">
+          <div><span>敵勢</span><strong id="pressureValue">5</strong><small>体前後</small></div>
+          <div><span>経過</span><strong id="timeValue">00:00</strong></div>
+          <div><span>最高</span><strong id="bestValue">0</strong><small>斬</small></div>
+        </section>
+
+        <section class="hud-mini">
+          <canvas id="minimap" width="180" height="120"></canvas>
+        </section>
+
+        <div class="hud-bigkills"><strong id="bigKills">0</strong><span>斬</span></div>
+        <div id="moraleReady" class="morale-ready">士気MAX　SPACEで発動！</div>
+      </div>
+
+      <div id="specialText" class="special-text" aria-hidden="true">かかれ柴田！</div>
+      <div id="pauseText" class="pause-text" aria-hidden="true">PAUSE</div>
+    </section>
+
+    <section class="mobile-controls" aria-label="スマホ操作">
+      <div class="dpad">
+        <button class="pad up" data-dir="up" type="button">▲</button>
+        <button class="pad left" data-dir="left" type="button">◀</button>
+        <button class="pad right" data-dir="right" type="button">▶</button>
+        <button class="pad down" data-dir="down" type="button">▼</button>
+      </div>
+      <button id="attackBtn" class="attack-btn" type="button">斬</button>
+    </section>
+
+    <section class="help">
+      <b>PC：</b> ↑↓←→ 移動 / SPACE 攻撃 / P 一時停止<br>
+      <b>第三陣：</b> クリア条件なし。敵勢は時間とともにじわじわ増える。柴田勝家が討死するまで戦い、最高討取数を競う。<br>
+      <b>かかれ柴田：</b> 士気100でSPACEが必殺へ切り替わり、勝家自身が周囲360度を一掃する。
+    </section>
+  </main>
+
+  <div id="startOverlay" class="modal-overlay active">
+    <div class="modal-card">
+      <div class="modal-kicker">第三陣・最終戦</div>
+      <h2>賤ヶ岳の戦い</h2>
+      <p>戦線は崩れ、敵勢は刻一刻と増していく。ここに突破条件はない。</p>
+      <p class="tip"><b>生き残るほど敵が増える。</b> 序盤は少数だが、時間経過で同時に迫る敵兵がじわじわ増加する。討死するまで一人でも多く討ち取れ。</p>
+      <button id="startBtn" class="main-btn" type="button">最終戦 開始</button>
+    </div>
+  </div>
+
+  <div id="gameOverOverlay" class="modal-overlay">
+    <div class="modal-card death-card">
+      <div class="modal-kicker">第三陣　終幕</div>
+      <h2>討死</h2>
+      <div id="recordBadge" class="record-badge">NEW RECORD</div>
+      <div class="result-grid">
+        <div><span>今回の討取</span><strong id="resultKills">0</strong></div>
+        <div><span>最高討取</span><strong id="resultBest">0</strong></div>
+        <div><span>生存時間</span><strong id="resultTime">00:00</strong></div>
+        <div><span>かかれ柴田</span><strong id="resultSpecials">0回</strong></div>
+      </div>
+      <p>これが今回の「鬼柴田」の記録。再び賤ヶ岳へ挑み、最高討取数を更新せよ。</p>
+      <div class="modal-actions">
+        <button id="retryBtn" class="main-btn" type="button">もう一度戦う</button>
+        <button id="titleBtn" class="sub-btn" type="button">タイトル画面に戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/nav.js"></script>
+  <script src="../../shared/game-config.js"></script>
+  <script src="script.js"></script>
+</body>
 </html>
