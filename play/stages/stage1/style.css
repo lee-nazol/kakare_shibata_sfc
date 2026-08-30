@@ -1,0 +1,43 @@
+:root{
+  --gold:#c99a4a;
+  --gold2:#f0d58c;
+  --cream:#f4e2bb;
+  --red:#a82f23;
+  --brown:#2b1d16;
+  --hudbg:rgba(17,13,11,.91);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#3a150b 0,#130a07 36%,#050303 100%);color:var(--cream);font-family:"Yu Mincho","Hiragino Mincho ProN","Yu Gothic",serif;overscroll-behavior:none}
+body{overflow-x:hidden}
+button{font:inherit;touch-action:manipulation}
+.app{width:min(1000px,100%);margin:0 auto;padding:14px}
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;border-bottom:3px solid var(--gold);padding:0 3px 11px;margin-bottom:13px}
+.eyebrow{font:800 11px/1.2 ui-monospace,monospace;letter-spacing:.15em;color:#bda168}
+h1{margin:4px 0 0;font-size:clamp(34px,6vw,60px);letter-spacing:.05em;color:#efd38b;text-shadow:4px 4px #6e1f17}
+.top-actions{display:flex;gap:8px}.small-btn{padding:8px 12px;border:2px solid #1a100c;background:#574238;color:#f4e4c3;font-weight:900;box-shadow:inset -3px -3px #241713,inset 3px 3px #846d5b}
+.game-wrap{position:relative;width:100%;max-width:960px;margin:0 auto;border:5px solid #443126;outline:2px solid var(--gold);background:#000;box-shadow:0 18px 55px #000c;overflow:hidden;aspect-ratio:320/224}
+#game{display:block;width:100%;height:100%;image-rendering:pixelated;background:#75613c;touch-action:none}
+.hud-layer{position:absolute;inset:0;pointer-events:none;font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",sans-serif;color:#fff4d8;text-shadow:0 2px 2px #000,1px 0 #000,-1px 0 #000,0 1px #000,0 -1px #000}
+.hud-player{position:absolute;left:1.4%;top:1.5%;width:43%;min-height:19%;display:flex;gap:8px;padding:8px 9px;background:linear-gradient(180deg,rgba(20,15,13,.95),rgba(27,20,16,.9));border:2px solid #b98b45;box-shadow:inset 0 0 0 2px #3c2b20,0 2px 5px #0009}
+.hud-portrait{width:23%;aspect-ratio:1/1;object-fit:cover;image-rendering:pixelated;border:2px solid #d1a25a;background:#100b09}
+.hud-stats{flex:1;min-width:0;padding-top:1px}
+.hud-row{height:28%;min-height:20px;display:grid;grid-template-columns:40px 1fr 31px;align-items:center;gap:6px;font-size:clamp(12px,1.7vw,18px);font-weight:900;white-space:nowrap}
+.hud-row b{text-align:right;font-size:.92em}
+.bar{position:relative;height:10px;background:#120906;border:2px solid #b89557;box-shadow:inset 0 0 0 1px #2b2119;overflow:hidden}
+.bar i{display:block;height:100%;width:0;transition:width .08s linear}
+.bar i.hp{background:linear-gradient(#ff6a50 0 42%,#c92d28 43% 100%)}
+.bar i.morale{background:linear-gradient(90deg,#3159a7,#5b90eb 72%,#ffcc45)}
+.hud-killline{margin-top:2px;font-size:clamp(13px,2vw,19px);font-weight:1000;letter-spacing:.03em}
+.hud-killline strong{font-size:1.2em;color:#ffe08a}.hud-killline small{font-size:.82em;color:#dbcda9}
+.hud-stage{position:absolute;right:1.5%;top:1.5%;width:34%;padding:7px 10px;text-align:center;background:linear-gradient(180deg,rgba(20,15,13,.96),rgba(29,21,17,.92));border:2px solid #b98b45;box-shadow:inset 0 0 0 2px #3c2b20,0 2px 5px #0009}
+.hud-stage strong,.hud-stage span{display:block}.hud-stage strong{font:900 clamp(13px,2vw,21px)/1.1 "Yu Mincho","Hiragino Mincho ProN",serif;color:#ffe4a2;letter-spacing:.04em}.hud-stage span{margin-top:5px;font-size:clamp(10px,1.45vw,15px);font-weight:800}
+.hud-mini{position:absolute;left:1.5%;bottom:2%;width:17.5%;aspect-ratio:3/2;padding:4px;background:rgba(14,10,8,.88);border:2px solid #b98b45;box-shadow:inset 0 0 0 2px #34251d}
+#minimap{display:block;width:100%;height:100%;background:rgba(0,0,0,.28)}
+.hud-bigkills{position:absolute;right:2.1%;bottom:3%;display:flex;align-items:flex-end;gap:7px;color:#ffe69a;text-shadow:3px 3px #6c2a14,0 0 5px #000}.hud-bigkills strong{font:900 clamp(40px,8vw,78px)/.8 Georgia,"Yu Mincho",serif}.hud-bigkills span{font:900 clamp(22px,4.6vw,43px)/.95 "Yu Mincho",serif}
+.morale-ready{position:absolute;left:50%;bottom:3.2%;transform:translateX(-50%) translateY(12px);padding:5px 13px;border:1px solid #e3b55b;background:rgba(26,13,7,.86);font-weight:1000;font-size:clamp(11px,1.8vw,17px);color:#ffe273;opacity:0;transition:.14s;white-space:nowrap}.morale-ready.active{opacity:1;transform:translateX(-50%) translateY(0);box-shadow:0 0 16px #ffba38aa}
+.special-text{position:absolute;left:50%;top:22%;transform:translate(-50%,-50%) scale(.82);opacity:0;pointer-events:none;white-space:nowrap;padding:5px 15px;border:1px solid rgba(218,170,79,.8);background:rgba(18,7,5,.74);font-size:clamp(24px,5vw,50px);font-weight:1000;color:#ffe596;text-shadow:4px 4px #8b1e14;transition:opacity .06s,transform .1s}.special-text.active{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.pause-text{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.62);font:1000 clamp(42px,8vw,74px)/1 Georgia,serif;letter-spacing:.08em;color:#f6e0a5;text-shadow:4px 4px #5d2a17;opacity:0;pointer-events:none}.pause-text.active{opacity:1}
+.mobile-controls{display:none;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:12px;touch-action:none;user-select:none}.dpad{position:relative;width:158px;height:126px}.pad{position:absolute;width:50px;height:44px;border:2px solid #1b100d;background:#655044;color:#f7e5c3;font-size:20px;font-weight:900;box-shadow:inset -3px -3px #251814,inset 3px 3px #8d725f}.pad.up{left:54px;top:0}.pad.down{left:54px;bottom:0}.pad.left{left:0;top:41px}.pad.right{right:0;top:41px}.attack-btn{width:92px;height:92px;border-radius:50%;border:3px solid #25100c;background:linear-gradient(#d95b40,#a62d22);color:#fff0ce;font-size:27px;font-weight:1000;box-shadow:inset -5px -5px #45140f,inset 5px 5px #ed8168}.attack-btn.ready{background:linear-gradient(#efb736,#a86616);box-shadow:0 0 22px #ffd86e,inset -5px -5px #6d3d0d,inset 5px 5px #ffe08d}
+.help{margin-top:12px;padding:11px 13px;border-left:4px solid #9f382a;background:rgba(30,19,15,.78);font:13px/1.7 "Yu Gothic",sans-serif;color:#cfbda5}
+.modal-overlay{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:max(16px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));background:rgba(0,0,0,.78);overflow:auto}.modal-overlay.active{display:grid}.modal-card{width:min(620px,95vw);max-height:calc(100dvh - 30px);overflow:auto;text-align:center;padding:26px 24px;background:linear-gradient(#38271f,#211713 60%,#160f0d);border:3px solid var(--gold);box-shadow:0 0 0 5px #080604,0 0 0 7px #69482f,0 20px 50px #000d}.modal-kicker{font:900 13px ui-monospace,monospace;color:#d5ad5d;letter-spacing:.18em}.modal-card h2{margin:7px 0 12px;font-size:clamp(38px,8vw,64px);color:#f5dfae;text-shadow:4px 4px #791f18}.modal-card p{font-family:"Yu Gothic",sans-serif;line-height:1.7;color:#dfcdb0}.tip{text-align:left;border-left:4px solid #b84634;background:#251713;padding:11px}.main-btn,.sub-btn{min-width:220px;padding:12px 20px;border:2px solid #1c100d;color:#f8e9c8;font-weight:900}.main-btn{background:linear-gradient(#d45b41,#a72f24);box-shadow:inset -3px -3px #43130f,inset 3px 3px #ed826b}.sub-btn{background:linear-gradient(#665044,#44352d);box-shadow:inset -3px -3px #241915,inset 3px 3px #8a705e}.modal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:16px}.death-card h2{color:#fff;text-shadow:5px 5px #a11f1d}.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}.result-grid div{padding:10px;background:#15100e;border:2px solid #5d4535}.result-grid span,.result-grid strong{display:block}.result-grid span{font:12px "Yu Gothic",sans-serif;color:#ad9779}.result-grid strong{margin-top:4px;font-size:28px;color:#efd18c}
+@media(max-width:760px){.app{padding:9px}.eyebrow{display:none}.topbar{align-items:center}.topbar h1{font-size:31px}.small-btn{padding:7px 9px}.mobile-controls{display:flex}.help{font-size:12px}.modal-card{padding:18px 14px}.modal-actions{position:sticky;bottom:0;flex-direction:column;background:linear-gradient(transparent,#160f0d 34%);padding-top:14px}.modal-actions button{width:100%;min-width:0}.result-grid{grid-template-columns:1fr 1fr}.hud-player{width:48%;padding:5px}.hud-stage{width:39%;padding:5px 6px}.hud-row{grid-template-columns:28px 1fr 23px;gap:3px}.hud-mini{width:20%}.morale-ready{bottom:2%;font-size:10px}.hud-bigkills{bottom:2%}}

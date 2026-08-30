@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#100806">
+  <title>かかれ柴田！ 第一陣 稲生の戦い</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">ORIGINAL 16BIT SAMURAI ACTION / STAGE 1</div>
+        <h1>かかれ柴田！</h1>
+      </div>
+      <div class="top-actions">
+        <button id="soundBtn" class="small-btn" type="button">♪ ON</button>
+        <button id="pauseBtn" class="small-btn" type="button">PAUSE</button>
+      </div>
+    </header>
+
+    <section id="gameWrap" class="game-wrap">
+      <canvas id="game" width="640" height="448" aria-label="第一陣 稲生の戦い"></canvas>
+
+      <div class="hud-layer" aria-hidden="true">
+        <section class="hud-player">
+          <img src="images/portrait.png" alt="" class="hud-portrait">
+          <div class="hud-stats">
+            <div class="hud-row"><span>体力</span><div class="bar"><i id="hpBar" class="hp"></i></div><b id="hpValue">100</b></div>
+            <div class="hud-row"><span>士気</span><div class="bar"><i id="moraleBar" class="morale"></i></div><b id="moraleValue">0</b></div>
+            <div class="hud-killline">討取 <strong id="hudKills">0</strong><small>/100</small></div>
+          </div>
+        </section>
+
+        <section class="hud-stage">
+          <strong>第一陣　稲生の戦い</strong>
+          <span>敵兵100人を討ち取れ</span>
+        </section>
+
+        <section class="hud-mini">
+          <canvas id="minimap" width="180" height="120"></canvas>
+        </section>
+
+        <div class="hud-bigkills"><strong id="bigKills">0</strong><span>斬</span></div>
+        <div id="moraleReady" class="morale-ready">士気MAX　SPACEで発動！</div>
+      </div>
+
+      <div id="specialText" class="special-text" aria-hidden="true">かかれ柴田！</div>
+      <div id="pauseText" class="pause-text" aria-hidden="true">PAUSE</div>
+    </section>
+
+    <section class="mobile-controls" aria-label="スマホ操作">
+      <div class="dpad">
+        <button class="pad up" data-dir="up" type="button">▲</button>
+        <button class="pad left" data-dir="left" type="button">◀</button>
+        <button class="pad right" data-dir="right" type="button">▶</button>
+        <button class="pad down" data-dir="down" type="button">▼</button>
+      </div>
+      <button id="attackBtn" class="attack-btn" type="button">斬</button>
+    </section>
+
+    <section class="help">
+      <b>PC：</b> ↑↓←→ 移動 / SPACE 攻撃 / P 一時停止<br>
+      <b>かかれ柴田：</b> 士気が100になると発動するまで100を維持。SPACEで勝家の360度薙ぎ払い＋味方兵突撃が発動します。
+    </section>
+  </main>
+
+  <div id="startOverlay" class="modal-overlay active">
+    <div class="modal-card">
+      <div class="modal-kicker">第一陣</div>
+      <h2>稲生の戦い</h2>
+      <p>敵兵100人を討ち取り、柴田勝家の武勇を示せ。</p>
+      <p class="tip">敵を斬り、前へ出ることで士気を高めよ。士気100に達するとゲージは減らない。SPACEで「かかれ柴田！」を発動せよ。</p>
+      <button id="startBtn" class="main-btn" type="button">戦闘開始</button>
+    </div>
+  </div>
+
+  <div id="gameOverOverlay" class="modal-overlay">
+    <div class="modal-card death-card">
+      <div class="modal-kicker">無念</div>
+      <h2>討死</h2>
+      <p>ここで散るも、まだ武勇の途は尽きていない。</p>
+      <div class="modal-actions">
+        <button id="retryBtn" class="main-btn" type="button">この陣をやり直す</button>
+        <button id="titleBtn" class="sub-btn" type="button">タイトル画面に戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="clearOverlay" class="modal-overlay">
+    <div class="modal-card clear-card">
+      <div class="modal-kicker">第一陣</div>
+      <h2>突破</h2>
+      <div class="result-grid">
+        <div><span>討取</span><strong id="resultKills">100</strong></div>
+        <div><span>かかれ柴田</span><strong id="resultSpecials">0回</strong></div>
+        <div><span>残り体力</span><strong id="resultHp">100</strong></div>
+      </div>
+      <p>第一陣 完。次なる「瓶割柴田」へ。</p>
+      <div class="modal-actions">
+        <button id="nextStageBtn" class="main-btn" type="button">第二陣へ</button>
+        <button id="clearRetryBtn" class="sub-btn" type="button">もう一度戦う</button>
+        <button id="clearTitleBtn" class="sub-btn" type="button">タイトル画面に戻る</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/nav.js"></script>
+  <script src="../../shared/game-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

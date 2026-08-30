@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>第二陣　瓶割柴田</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#36150c,#0b0604 65%);color:#f3ddb0;font-family:"Yu Mincho","Hiragino Mincho ProN",serif}body{display:grid;place-items:center;padding:18px}.card{width:min(720px,95vw);text-align:center;padding:42px 28px;border:3px solid #b98c47;background:linear-gradient(#35231c,#160e0b);box-shadow:0 20px 60px #000c}.k{color:#d5ad5b;letter-spacing:.18em;font:900 13px ui-monospace,monospace}h1{font-size:clamp(34px,7vw,62px);margin:10px 0;color:#f5dfaa;text-shadow:4px 4px #6e2018}p{font-family:"Yu Gothic",sans-serif;line-height:1.7;color:#d7c4a5}.buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:22px}button{padding:12px 22px;border:2px solid #1d110d;background:#5d473a;color:#f5e4c0;font-weight:900;cursor:pointer}.primary{background:linear-gradient(#c94d37,#9d2c22)}
+</style>
+</head>
+<body><main class="card"><div class="k">DEVELOPMENT SLOT</div><h1>第二陣　瓶割柴田</h1><p>このフォルダは次の陣を独立して開発・確認するためのスロットです。<br>完成したらこの index.html をそのまま差し替えれば、プレイ入口から連続して進められます。</p><div class="buttons"><button id="titleBtn">タイトルへ</button><button id="stage1Btn" class="primary">第一陣を確認</button></div></main><script src="../../shared/nav.js"></script><script>document.getElementById('titleBtn').onclick=()=>KAKARE_NAV.go('title','../../title/index.html');document.getElementById('stage1Btn').onclick=()=>KAKARE_NAV.go('stage1','../stage1/index.html');</script></body>
+</html>

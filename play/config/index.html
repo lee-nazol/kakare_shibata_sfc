@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>コンフィグ</title>
+  <style>
+    :root{--bg:#071011;--panel:#0b1516;--gold:#b38a45;--gold2:#e8c979;--text:#f2dfb8;--red:#ac3024}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#142326,#061011 70%);color:var(--text);font-family:"Yu Mincho","Hiragino Mincho ProN","Yu Gothic",serif}
+    body{display:grid;place-items:center;padding:16px}.wrap{width:min(1040px,100%);border:3px solid var(--gold);box-shadow:0 18px 60px #000b;background:linear-gradient(#0d181a,#071011);padding:20px}.title{margin:0 0 14px;font-size:32px;border-bottom:2px solid #72562c;padding-bottom:10px}.layout{display:grid;grid-template-columns:1.35fr .65fr;gap:20px}.box{border:2px solid #5f4a2e;background:rgba(0,0,0,.18);padding:16px}.box h2{margin:0 0 12px;color:var(--gold2);font-size:22px}.row{display:grid;grid-template-columns:130px 1fr 1fr;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #4c3c2a}.row:last-child{border-bottom:0}.action{font-family:"Yu Gothic",sans-serif;font-weight:800}.key{border:2px solid #84673d;background:#151b1a;color:#fff0cc;padding:9px 10px;font-weight:900;cursor:pointer;min-height:42px}.key.listening{outline:3px solid #f2d276;background:#3a2a16}.legend{font-family:"Yu Gothic",sans-serif;line-height:1.8;color:#d4c2a1}.legend kbd{display:inline-block;min-width:46px;text-align:center;padding:4px 7px;border:2px solid #7a613d;background:#131919;color:#fff0c9;font-weight:900}.actions{display:flex;justify-content:space-between;gap:12px;margin-top:18px}.reset,.go{padding:13px 20px;font-weight:1000;cursor:pointer;border:2px solid #1b100d}.reset{background:#4b3a30;color:#f0dfbd}.go{margin-left:auto;min-width:260px;background:linear-gradient(#d2523b,#9f2b20);color:#fff0ce;box-shadow:inset -3px -3px #4a140f,inset 3px 3px #e77c66}.hint{text-align:center;margin-top:12px;font:13px/1.5 "Yu Gothic",sans-serif;color:#9d8b6c}
+    @media(max-width:760px){.layout{grid-template-columns:1fr}.row{grid-template-columns:95px 1fr 1fr}.wrap{padding:12px}.actions{flex-direction:column}.go{width:100%;min-width:0}.reset{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="title">コンフィグ</h1>
+    <div class="layout">
+      <section class="box">
+        <h2>ボタン割り当て</h2>
+        <div id="rows"></div>
+      </section>
+      <aside class="box">
+        <h2>操作説明</h2>
+        <div class="legend">
+          <p><kbd>↑↓←→</kbd> 移動</p>
+          <p><kbd>SPACE</kbd> 斬撃 / 士気MAX時「かかれ柴田！」</p>
+          <p><kbd>P</kbd> 一時停止</p>
+          <p>各キーをクリックすると再割り当てできます。メイン・サブの2キーを登録できます。</p>
+        </div>
+      </aside>
+    </div>
+    <div class="actions"><button id="resetBtn" class="reset">初期設定に戻す</button><button id="goBtn" class="go">決定して出陣！</button></div>
+    <div class="hint">設定はブラウザのlocalStorageに保存され、第一陣以降でも共通利用します。</div>
+  </main>
+  <script src="../shared/nav.js"></script>
+  <script src="../shared/game-config.js"></script>
+  <script>
+    const labels={up:'移動・上',down:'移動・下',left:'移動・左',right:'移動・右',attack:'斬撃 / かかれ柴田',pause:'PAUSE'};
+    let cfg=KAKARE_CONFIG.load(); let listening=null;
+    const rows=document.getElementById('rows');
+    function render(){
+      rows.innerHTML='';
+      Object.keys(labels).forEach(action=>{
+        const row=document.createElement('div'); row.className='row';
+        const name=document.createElement('div'); name.className='action'; name.textContent=labels[action]; row.appendChild(name);
+        [0,1].forEach(slot=>{
+          const b=document.createElement('button'); b.className='key'; b.textContent=KAKARE_CONFIG.label(cfg[action][slot]);
+          b.onclick=()=>{ listening={action,slot,button:b}; document.querySelectorAll('.key').forEach(x=>x.classList.remove('listening')); b.classList.add('listening'); b.textContent='入力待ち…'; };
+          row.appendChild(b);
+        }); rows.appendChild(row);
+      });
+    }
+    addEventListener('keydown',e=>{
+      if(!listening)return; e.preventDefault();
+      if(e.code==='Escape'){ listening=null; render(); return; }
+      cfg[listening.action][listening.slot]=e.code; KAKARE_CONFIG.save(cfg); listening=null; render();
+    });
+    document.getElementById('resetBtn').onclick=()=>{cfg=KAKARE_CONFIG.reset();render();};
+    document.getElementById('goBtn').onclick=()=>{KAKARE_CONFIG.save(cfg);KAKARE_NAV.go('stage1','../stages/stage1/index.html');};
+    render();
+  </script>
+</body>
+</html>
